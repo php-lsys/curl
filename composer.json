@@ -1,0 +1,16 @@
+{
+	"name" : "lsys/curl",
+	"type" : "library",
+	"license" : "Apache-2.0",
+	"version" : "1.0.0",
+	"description" : "lsys module curl",
+	"autoload" : {
+		"psr-4" : {
+			"LSYS\\" : "src/classes/LSYS/"
+		}
+	},
+	"require" : {
+		"ext-curl" : "*",
+		"ext-zlib" : "*"
+	}
+}
