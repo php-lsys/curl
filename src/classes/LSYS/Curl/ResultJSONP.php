@@ -13,7 +13,7 @@ class ResultJSONP extends ResultJSON{
      * 数据转换为数据
      * @return array
      */
-    public function fun_name(){
+    public function funName(){
         return $this->_name;
     }
 }

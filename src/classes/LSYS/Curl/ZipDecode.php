@@ -17,7 +17,7 @@ class ZipDecode{
         $strInfo = @unpack("C2chars", substr($this->_data,0,2));
         return isset($strInfo['chars1'])&&isset($strInfo['chars1'])&&intval($strInfo['chars1'].$strInfo['chars2'])==31139;
     }
-    public function get_data(){
+    public function getData(){
         if ($this->status()){
             $data=$this->_gzdecode($this->_data);
             if ($data!==false)return $data;

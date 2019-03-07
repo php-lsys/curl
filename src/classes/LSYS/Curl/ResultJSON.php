@@ -5,7 +5,7 @@ class ResultJSON extends Result{
     protected $_parse=true;
     public function __construct($http_status,$code,$http_code,$header,$data){
         parent::__construct($http_status,$code,$http_code,$header,$data);
-        if ($this->get_http_status()){
+        if ($this->getHttpStatus()){
             $data=@json_decode($this->_data,true);
             if (!is_array($data)){
                 $this->_parse=false;
@@ -18,10 +18,10 @@ class ResultJSON extends Result{
      * 数据转换为数据
      * @return array
      */
-    public function data_as_array(){
+    public function dataAsArray(){
         return $this->_arr;
     }
-    public function get_status(){
-        return $this->_parse&&parent::get_status();
+    public function getStatus(){
+        return $this->_parse&&parent::getStatus();
     }
 }

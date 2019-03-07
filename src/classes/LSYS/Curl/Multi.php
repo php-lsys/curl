@@ -20,8 +20,8 @@ class Multi{
     public function exec(){
         $mh=$this->_mh;
         foreach ($this->_curl as list($curl,$callback)){
-            $_ch=$curl->get_ch();
-            curl_setopt_array($_ch, $curl->get_opt());
+            $_ch=$curl->getCh();
+            curl_setopt_array($_ch, $curl->getOpt());
             curl_multi_add_handle($mh,$_ch);
         }
         $active = null;
@@ -46,11 +46,11 @@ class Multi{
             }
         }
         foreach ($this->_curl as list($curl,$callback)){
-            $ch=$curl->get_ch();
+            $ch=$curl->getCh();
             if (curl_error($ch)){
-                $result=Curl::parse_result($curl, false);
+                $result=Curl::parseResult($curl, false);
             }else{
-                $result=Curl::parse_result($curl, curl_multi_getcontent($ch));
+                $result=Curl::parseResult($curl, curl_multi_getcontent($ch));
             }
             call_user_func($callback,$result);
             curl_multi_remove_handle($mh, $ch);
