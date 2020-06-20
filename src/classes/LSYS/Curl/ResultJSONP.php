@@ -2,7 +2,7 @@
 namespace LSYS\Curl;
 class ResultJSONP extends ResultJSON{
     protected $_name;
-    public function __construct($http_status,$code,$http_code,$header,$data){
+    public function __construct(bool $http_status,?int $code,?int $http_code,array $header,$data){
         $len=strpos($data, '(');
         $this->_name=substr($data, 0,$len);
         $data=substr($data, $len);
@@ -11,9 +11,9 @@ class ResultJSONP extends ResultJSON{
     }
     /**
      * 数据转换为数据
-     * @return array
+     * @return string
      */
-    public function funName(){
+    public function funName():?string{
         return $this->_name;
     }
 }

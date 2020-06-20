@@ -3,7 +3,7 @@ namespace LSYS\Curl;
 class ResultJSON extends Result{
     protected $_arr=[];
     protected $_parse=true;
-    public function __construct($http_status,$code,$http_code,$header,$data){
+    public function __construct(bool $http_status,?int $code,?int $http_code,array $header,$data){
         parent::__construct($http_status,$code,$http_code,$header,$data);
         if ($this->getHttpStatus()){
             $data=@json_decode($this->_data,true);
@@ -18,10 +18,10 @@ class ResultJSON extends Result{
      * 数据转换为数据
      * @return array
      */
-    public function dataAsArray(){
+    public function dataAsArray():array{
         return $this->_arr;
     }
-    public function getStatus(){
+    public function getStatus():bool{
         return $this->_parse&&parent::getStatus();
     }
 }

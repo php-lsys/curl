@@ -61,7 +61,7 @@ class Multi{
      * @param Curl[] $curl
      * @return Result[]
      */
-    public static function run(array $curl){
+    public static function run(array $curl):array{
         $mu=new static();
         $out=[];
         foreach ($curl as $k=>$v){

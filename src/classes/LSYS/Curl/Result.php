@@ -7,7 +7,7 @@ class Result{
     protected $_header;
     protected $_data;
     protected $_msg;
-    public function __construct($http_status,$code,$http_code,$header,$data){
+    public function __construct(bool $http_status,?int $code,?int $http_code,array $header=[],$data){
         $this->_http_status=boolval($http_status);
         $this->_code=$code;
         $this->_http_code=$http_code;
@@ -21,28 +21,28 @@ class Result{
      * HTTP请求是否成功
      * @return bool
      */
-    public function getHttpStatus(){
+    public function getHttpStatus():bool{
         return $this->_http_status;
     }
     /**
      * 处理结果状态
      * @return boolean
      */
-    public function getStatus(){
+    public function getStatus():bool{
         return $this->_http_status&&($this->_http_code>=200&&$this->_http_code<300);
     }
     /**
      * 错误码
      * @return int
      */
-    public function getCode(){
+    public function getCode():?int{
         return $this->_code;
     }
     /**
      * HTTP码
      * @return int
      */
-    public function getHttpCode(){
+    public function getHttpCode():?int{
         return $this->_http_code;
     }
     /**
@@ -58,7 +58,7 @@ class Result{
      * @param mixed $default
      * @return string
      */
-    public function getHeaders($key=null,$default=null){
+    public function getHeaders(?string $key=null,$default=null){
         if ($key===null)return $this->_header;
         if (!isset($this->_header[$key]))return $default; 
         return $this->_header[$key];
@@ -67,7 +67,7 @@ class Result{
      * 错误消息
      * @return string
      */
-    public function getMsg(){
+    public function getMsg():string{
         return $this->_msg;
     }
 }

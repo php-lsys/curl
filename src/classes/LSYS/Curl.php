@@ -43,7 +43,7 @@ class Curl{
      * 方便进行统一的调试输出等
      * @param string $url
      */
-    public function __construct($url=null,$method=null,$format=null){
+    public function __construct(?string $url=null,?int $method=null,?int $format=null){
         $this->_opts = self::$opts;
         $this->setReferer();
         $url!==null&&$this->setUrl($url);
@@ -54,7 +54,7 @@ class Curl{
      * @param int $status
      * @return $this
      */
-    public function setResultFormat($format){
+    public function setResultFormat(int $format){
         $this->_format=$format;
         return $this;
     }
@@ -62,7 +62,7 @@ class Curl{
      * @param int $status
      * @return $this
      */
-    public function setResultHeader($status){
+    public function setResultHeader(bool $status){
         $this->_header=boolval($status);
         return $this;
     }
@@ -70,7 +70,7 @@ class Curl{
      * @param string $useragent
      * @return $this
      */
-    public function setUseragent($useragent=null){
+    public function setUseragent(?string $useragent=null){
         if ($useragent===null)unset($this->_opts[CURLOPT_USERAGENT]);
         else $this->_opts[CURLOPT_USERAGENT]=$useragent;
         return $this;
@@ -79,14 +79,14 @@ class Curl{
      * @param int $status
      * @return $this
      */
-    public function setTimeout($time){
+    public function setTimeout(int $time){
         if ($time<=0)return $this;
         $this->_opts[CURLOPT_CONNECTTIMEOUT]=$time;
         $this->_opts[CURLOPT_TIMEOUT]=$time;
         return $this;
     }
     /**
-     * @param bool $status
+     * @param bool|int $accept_encoding
      * @return $this
      */
     public function setAcceptEncoding($accept_encoding=true){
@@ -97,7 +97,7 @@ class Curl{
      * @param bool $status
      * @return $this
      */
-    public function setReferer($status=true){
+    public function setReferer(bool $status=true){
         if($status){
             $this->_opts[CURLOPT_REFERER]=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
         }else unset($this->_opts[CURLOPT_REFERER]);
@@ -105,7 +105,7 @@ class Curl{
     }
     /**
      * 设置CURL OPTION
-     * @param int $option
+     * @param int|array $option
      * @param mixed $value
      * @return $this
      */
@@ -125,7 +125,7 @@ class Curl{
      * @param mixed $value
      * @return $this
      */
-    public function setUrl($url){
+    public function setUrl(string $url){
         $this->_opts[CURLOPT_URL]=$url;
         return $this;
     }
@@ -135,7 +135,7 @@ class Curl{
      * @param mixed $value
      * @return $this
      */
-    public function getOpt($option=null){
+    public function getOpt(?int $option=null){
         if ($this->_accept_encoding==self::ACCEPT_ENCODING_AUTO){
             $this->_opts[CURLOPT_HTTPHEADER][]='Accept-Encoding:gzip';
         }
@@ -164,7 +164,7 @@ class Curl{
      * @param string $ca_path
      * @return $this
      */
-    public function setCa($ca_path){
+    public function setCa(string $ca_path){
         if (!is_file($ca_path))return $this;
         $this->_opts[CURLOPT_CAINFO]=$ca_path;
         return $this;
@@ -175,7 +175,7 @@ class Curl{
      * @param string $sslkey_path
      * @return $this
      */
-    public function setSsl($sslcert_path,$sslkey_path){
+    public function setSsl(string $sslcert_path,string $sslkey_path){
         $this->_opts[CURLOPT_SSLCERTTYPE]='PEM';
         $this->_opts[CURLOPT_SSLCERT]=$sslcert_path;
         $this->_opts[CURLOPT_SSLKEYTYPE]='PEM';
@@ -196,7 +196,7 @@ class Curl{
      * @param string $sslkey_path
      * @return $this
      */
-    public function verifySsl($status){
+    public function verifySsl(bool $status){
         $status=$status?1:0;
         $this->_opts[CURLOPT_SSL_VERIFYHOST]=$status;
         $this->_opts[CURLOPT_SSL_VERIFYPEER]=$status;
@@ -207,7 +207,7 @@ class Curl{
      * @param int $method
      * @return $this
      */
-    public function setMethod($method){
+    public function setMethod(int $method){
         switch($method) {
             case self::METHOD_GET:
                 $this->_opts[CURLOPT_POST]=FALSE;
@@ -226,11 +226,11 @@ class Curl{
     }
     /**
      * 设置上传数据
-     * @param string $data
+     * @param string|array $data
      * @param int $data_type
      * @return $this
      */
-    public function setData($data,$data_type=self::DATA_AUTO){
+    public function setData($data,int $data_type=self::DATA_AUTO){
         if ($data_type==self::DATA_AUTO){
             if (isset($this->_opts[CURLOPT_POST])){
                 switch($this->_opts[CURLOPT_POST]) {
@@ -266,7 +266,7 @@ class Curl{
      * @param string $mimetype
      * @return $this
      */
-    public function setFile($file_path, $file_name,$mimetype = null){
+    public function setFile(string $file_path,string  $file_name,?string $mimetype = null){
         if (isset($this->_opts[CURLOPT_POSTFIELDS])){
             if (is_string($this->_opts[CURLOPT_POSTFIELDS])){
                 $this->_opts[CURLOPT_POSTFIELDS]=parse_str($this->_opts[CURLOPT_POSTFIELDS]);
@@ -285,7 +285,7 @@ class Curl{
      * @param string $proxy_auth
      * @return $this
      */
-    public function setProxy($proxy_ip, $proxy_port,$proxy_user = null,$proxy_auth=CURLAUTH_BASIC){
+    public function setProxy(string $proxy_ip, string $proxy_port,?string $proxy_user = null,int $proxy_auth=CURLAUTH_BASIC){
         $this->_opts[CURLOPT_PROXY]=$proxy_ip;
         $this->_opts[CURLOPT_PROXYPORT]=$proxy_port;
         if(!empty($proxy_auth)){
@@ -359,9 +359,10 @@ class Curl{
     /**
      * 关闭CURL连接
      */
-    public function close(){
+    public function close():bool{
         if (is_resource($this->_ch))curl_close($this->_ch);
         $this->_ch=null;
+        return true;
     }
     public function __destruct(){
         $this->close();

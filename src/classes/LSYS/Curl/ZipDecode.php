@@ -13,7 +13,7 @@ class ZipDecode{
      * 是否需要解压
      * @return boolean
      */
-    public function status(){
+    public function status():bool{
         $strInfo = @unpack("C2chars", substr($this->_data,0,2));
         return isset($strInfo['chars1'])&&isset($strInfo['chars1'])&&intval($strInfo['chars1'].$strInfo['chars2'])==31139;
     }
